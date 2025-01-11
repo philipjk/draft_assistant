@@ -14,7 +14,8 @@ if __name__ == "__main__":
     parser = LogParser(MAC_LOG_PATH)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = DraftPicker(embedding_dim=16, num_cards=len(card_to_idx)).to(device)
-    model.load_state_dict(torch.load(MODEL_NAME, map_location=device), strict=False)
+    model.load_state_dict(torch.load(MODEL_NAME, map_location=device,weights_only=True),
+                          strict=False)
     model.to(device)
     model.eval()
 
