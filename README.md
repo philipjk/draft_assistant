@@ -9,7 +9,7 @@ Once you clone or download the repository, `cd` inside it and
 - run it with `python main.py`. Note: if you start the application before starting Arena, it will process the currently available log file until it is overwritten with the next one.
 
 # What it does
-In a Premier Draft on Arena, it uses pack and pool cards to provide a score to each card in the pack. The scores sum to 1. "Mtg: Foundations" only is the only expansion supported as of now.
+In a Premier Draft on Arena, it uses pack and pool cards to provide a score to each card in the pack. The scores sum to 1. "Mtg: Foundations" is the only expansion supported as of now.
 
 # How it does it
  We are using pure data-based approaches to model the probability distribution `P(x \in y|y,z,w,k)`, i.e. the probability of picking card `x` from pack `y`, conditioned on pack `y`, pool of cards `z`, expected number of wins `w` and player rank `k`.
