@@ -40,6 +40,7 @@ class LogParser():
         return card_names
 
     def search_pick(self):
+        flag = False
         with open(self.log_path, 'r',
                     encoding='utf-8',
                     errors='replace') as self.log_file:
@@ -47,6 +48,7 @@ class LogParser():
             while True:
                 line = self.log_file.readline()
                 if not line:
+                    flag = False
                     break
                 if 'DraftMakePick' in line:
                     start_offset = line.find('{"id"')
@@ -56,10 +58,13 @@ class LogParser():
                     self.last_pick = request['GrpId']
                     self.pick_number += 1
                     logging.info(f"Pack {request['Pack']} Pick {request['Pick']} made.")
+                    flag = True
                     break
             self.log_position = self.log_file.tell()
+        return flag
 
     def search_pack(self):
+        flag = False
         with open(self.log_path, 'r',
                     encoding='utf-8',
                     errors='replace') as self.log_file:
@@ -67,16 +72,20 @@ class LogParser():
             while True:
                 line = self.log_file.readline()
                 if not line:
+                    flag = False
                     break
                 if 'PackCards' in line:
                     start_offset = line.find('{"draftId"')
                     payload_data = json.loads(line[start_offset:])
                     self.pack = [int(card) for card in payload_data['PackCards'].split(',')]
                     logging.info(f"Pack data found.")
+                    flag = True
                     break
             self.log_position = self.log_file.tell()
+        return flag
 
     def search_p1p1(self):
+        flag = False
         with open(self.log_path, 'r',
                     encoding='utf-8',
                     errors='replace') as self.log_file:
@@ -84,7 +93,7 @@ class LogParser():
             while True:
                 line = self.log_file.readline()
                 if not line:
-                    break
+                    flag = False
                 if 'MakePick' in line:
                     logging.info("Pack 1 Pick 1. No pack data.")
                     start_offset = line.find('{"id"')
@@ -92,8 +101,10 @@ class LogParser():
                     request = json.loads(payload_data['request'])
                     self.pool.append(request['GrpId'])
                     self.pick_number += 1
+                    flag = True
                     break
             self.log_position = self.log_file.tell()
+        return flag
 
     def search_draft_start(self):
         # TODO: add a try/except for when the log file does not exist yet
